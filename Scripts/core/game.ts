@@ -1,96 +1,83 @@
 /// <reference path="_reference.ts" />
 
 (function () {
+    const ARROW_KEY_LEFT = 37;
+    const ARROW_KEY_RIGHT = 39;
 
-    //var declarations
-    let stage
-    let shapes = []
-    let slots = []
-    let score = 0
+    let stage, padel: createjs.Shape;
+    let leftKeyDown, rightKeyDown = false;
 
-    function init() {
+    let init = () => {
         stage = new createjs.Stage(document.getElementById('canvas'))
-        buildShapes()
-        setBlocks()
+        createjs.Ticker.on('tick', tick)
+        createjs.Ticker.framerate = 60
         startGame()
     }
 
-    function buildShapes() {
-        var colors = ['blue', 'red', 'green', 'yellow'];
-        var i, shape, slot;
-        for (i = 0; i < colors.length; i++) {
-            //slots
-            slot = new createjs.Shape();
-            slot.graphics.beginStroke(colors[i]);
-            slot.graphics.beginFill('#FFF');
-            slot.graphics.drawRect(0, 0, 100, 100);
-            slot.regX = slot.regY = 50;
-            slot.key = i;
-            slot.y = 80;
-            slot.x = (i * 130) + 100;
-            stage.addChild(slot);
-            slots.push(slot);
-            //shapes
-            shape = new createjs.Shape();
-            shape.graphics.beginFill(colors[i]);
-            shape.graphics.drawRect(0, 0, 100, 100);
-            shape.regX = shape.regY = 50;
-            shape.key = i;
-            shapes.push(shape);
+    let startGame = () => {
+        padel = new createjs.Shape()
+        padel.width = 100
+        padel.graphics.beginFill('#00f')
+            .drawRect(0, 0, padel.width, 20)
+        padel.x = padel.nextX = 0
+        padel.y = stage.canvas.height - 20
+        stage.addChild(padel)
+
+        //handle keys
+        window.onkeydown = movePadel
+        window.onkeyup = stopPadel
+    }
+
+    let movePadel = (e) => {
+        e = !e ? window.event : e
+
+        console.log(e.keyCode);
+        
+        switch (e.keyCode) {
+            case ARROW_KEY_LEFT:
+                leftKeyDown = true
+                break
+            case ARROW_KEY_RIGHT:
+                rightKeyDown = true
+                break
         }
     }
 
-    function setBlocks() {
-        var i, r, shape;
-        var l = shapes.length;
-        for (i = 0; i < l; i++) {
-            r = Math.floor(Math.random() * shapes.length);
-            shape = shapes[r];
-            shape.homeY = 320;
-            shape.homeX = (i * 130) + 100;
-            shape.y = shape.homeY;
-            shape.x = shape.homeX;
-            shape.addEventListener("mousedown", startDrag);
-            stage.addChild(shape);
-            shapes.splice(r, 1);
+    function stopPadel(e) {
+        e = !e ? window.event : e
+        switch (e.keyCode) {
+            case 37:
+                leftKeyDown = false
+                break
+            case 39:
+                rightKeyDown = false
+                break
         }
     }
 
-    function startGame() {
-        createjs.Ticker.setFPS(60);
-        createjs.Ticker.addEventListener("tick", function (e) {
-            stage.update();
-        });
-    }
-
-    function startDrag(e) {
-        var shape = e.target;
-        var slot = slots[shape.key];
-        stage.setChildIndex(shape, stage.getNumChildren() - 1);
-        stage.addEventListener('stagemousemove', function (e) {
-            shape.x = e.stageX;
-            shape.y = e.stageY;
-        });
-        stage.addEventListener('stagemouseup', function (e) {
-            stage.removeAllEventListeners();
-            var pt = slot.globalToLocal(stage.mouseX, stage.mouseY);
-            if (shape.hitTest(pt.x, pt.y)) {
-                shape.removeEventListener("mousedown", startDrag);
-                score++;
-                createjs.Tween.get(shape).to({ x: slot.x, y: slot.y }, 200,
-                    createjs.Ease.quadOut).call(checkGame);
-            }
-            else {
-                createjs.Tween.get(shape).to({ x: shape.homeX, y: shape.homeY }, 200,
-                    createjs.Ease.quadOut);
-            }
-        });
-    }
-
-    function checkGame() {
-        if (score == 3) {
-            alert('You Win!');
+    function update() {
+        let nextX = padel.x
+        if (leftKeyDown) {
+            nextX = padel.x - 10
+            if (nextX < 0)
+                nextX = 0
         }
+        else if (rightKeyDown) {
+            nextX = padel.x + 10
+            if (nextX > stage.canvas.width - padel.width)
+                nextX = stage.canvas.width - padel.width
+        }
+        padel.nextX = nextX
+    }
+
+    function render() {
+        padel.x = padel.nextX
+    }
+
+    function tick(e) {
+        update()
+        render()
+        stage.update()
     }
 
     window.onload = init;
