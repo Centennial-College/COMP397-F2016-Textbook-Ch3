@@ -29,10 +29,8 @@
     }
 
     let movePadel = (e) => {
-        e = !e ? window.event : e
+        // e = !e ? window.event : e
 
-        console.log(e.keyCode);
-        
         switch (e.keyCode) {
             case ARROW_KEY_LEFT:
                 leftKeyDown = true
@@ -44,7 +42,7 @@
     }
 
     function stopPadel(e) {
-        e = !e ? window.event : e
+        // e = !e ? window.event : e
         switch (e.keyCode) {
             case 37:
                 leftKeyDown = false
