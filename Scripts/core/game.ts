@@ -28,6 +28,16 @@
         circle.on('mouseout', function (e) {
             this.alpha = .5
         })
+
+        circle.on('mousedown', (e) => {
+            stage.on('stagemousemove', (e) => {
+                circle.x = stage.mouseX
+                circle.y = stage.mouseY
+            })
+            stage.on('stagemouseup', (e) => {
+                e.target.removeAllEventListeners()
+            })
+        })
     }
 
     function setupStage() {

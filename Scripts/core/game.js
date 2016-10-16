@@ -22,6 +22,15 @@
         circle.on('mouseout', function (e) {
             this.alpha = .5;
         });
+        circle.on('mousedown', function (e) {
+            stage.on('stagemousemove', function (e) {
+                circle.x = stage.mouseX;
+                circle.y = stage.mouseY;
+            });
+            stage.on('stagemouseup', function (e) {
+                e.target.removeAllEventListeners();
+            });
+        });
     }
     function setupStage() {
         stage = new createjs.Stage(document.getElementById('canvas'));
