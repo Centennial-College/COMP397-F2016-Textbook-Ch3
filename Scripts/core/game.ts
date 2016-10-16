@@ -13,6 +13,12 @@
         let circle = new createjs.Shape()
         circle.graphics.beginFill('#00f')
             .drawCircle(0, 0, 50)
+        circle.x = stage.canvas.width / 2
+        circle.y = stage.canvas.height / 2
+        circle.name = 'Blue Circle'
+        stage.addChild(circle)
+
+        circle.on('dblclick', (e) => { alert(e.target + ' was double clicked!') })
     }
 
     function setupStage() {

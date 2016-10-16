@@ -1,12 +1,19 @@
 /// <reference path="_reference.ts" />
 (function () {
-    var LOADER_WIDTH = 400;
-    var stage, loaderBar, loadInterval;
-    var percentLoaded = 0;
+    var stage;
     function init() {
         setupStage();
-        buildLoaderBar();
-        startLoad();
+        main();
+    }
+    function main() {
+        var circle = new createjs.Shape();
+        circle.graphics.beginFill('#00f')
+            .drawCircle(0, 0, 50);
+        circle.x = stage.canvas.width / 2;
+        circle.y = stage.canvas.height / 2;
+        circle.name = 'Blue Circle';
+        stage.addChild(circle);
+        circle.on('dblclick', function (e) { alert(e.target + ' was double clicked!'); });
     }
     function setupStage() {
         stage = new createjs.Stage(document.getElementById('canvas'));
@@ -14,35 +21,6 @@
         createjs.Ticker.on('tick', function (e) {
             stage.update();
         });
-    }
-    function buildLoaderBar() {
-        loaderBar = new createjs.Shape();
-        loaderBar.x = loaderBar.y = 100;
-        loaderBar.graphics.setStrokeStyle(2);
-        loaderBar.graphics.beginStroke('#000');
-        loaderBar.graphics.drawRect(0, 0, LOADER_WIDTH, 40);
-        stage.addChild(loaderBar);
-    }
-    function updateLoaderBar() {
-        loaderBar.graphics.clear();
-        loaderBar.graphics.beginFill('#0f0');
-        loaderBar.graphics.drawRect(0, 0, LOADER_WIDTH * percentLoaded, 40);
-        loaderBar.graphics.endFill();
-        loaderBar.graphics.setStrokeStyle(2);
-        loaderBar.graphics.beginStroke('#000');
-        loaderBar.graphics.drawRect(0, 0, LOADER_WIDTH, 40);
-        loaderBar.graphics.endStroke();
-    }
-    function startLoad() {
-        loadInterval = setInterval(updateLoad, 50);
-    }
-    function updateLoad() {
-        percentLoaded += .005;
-        updateLoaderBar();
-        if (percentLoaded >= 1) {
-            clearInterval(loadInterval);
-            stage.removeChild(loaderBar);
-        }
     }
     window.onload = init;
 })();
