@@ -2,19 +2,32 @@
 <html>
 
 <head>
-    <title></title>
+	<title></title>
 
 </head>
 
 <body>
-    <canvas id="canvas" width="1000" height="800" style="border: black solid 1px"></canvas>
 
-    <script src="Scripts/lib/jQuery/dist/jquery.min.js"></script>
-    <script src="Scripts/lib/EaselJS/lib/easeljs-0.8.2.min.js"></script>
-    <script src="Scripts/lib/TweenJS/lib/tweenjs-0.6.2.min.js"></script>
-    <script src="Scripts/lib/SoundJS/lib/soundjs-0.6.2.min.js"></script>
-    <script src="Scripts/lib/PreloadJS/lib/preloadjs-0.6.2.min.js"></script>
-    <script src="Scripts/core/game.js"></script>
+	<div id="gameHolder">
+		<div id="instructions" style="width: 900px;height: 500px;border: dashed 2
+         #008b8b;text-align: center;">
+			<h3 style="font-family:arial;">Game Instructions</h3>
+			<p><strong>Click</strong> on the <span style="color:red">RED</span> balloons as they fall from the sky.</p>
+			<p>Make sure you click them <span style="text-decoration:
+         underline">all</span> before time runs out!</p>
+			<p>Rack up <i>as many points</i> as you can to reach the <span style="color:blue">BLUE</span> level.</p>
+			<h2 style="font-weight: bold;margin-top:30px">GOOD LUCK!</h2>
+		</div>
+		<canvas id="canvas" width="1024" height="600" style="border: black solid
+      1px"></canvas>
+	</div>
+
+	<script src="Scripts/lib/jQuery/dist/jquery.min.js"></script>
+	<script src="Scripts/lib/EaselJS/lib/easeljs-0.8.2.min.js"></script>
+	<script src="Scripts/lib/TweenJS/lib/tweenjs-0.6.2.min.js"></script>
+	<script src="Scripts/lib/SoundJS/lib/soundjs-0.6.2.min.js"></script>
+	<script src="Scripts/lib/PreloadJS/lib/preloadjs-0.6.2.min.js"></script>
+	<script src="Scripts/core/game.js"></script>
 </body>
 
 </html>
